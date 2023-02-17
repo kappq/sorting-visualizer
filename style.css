@@ -8,13 +8,13 @@
 }
 
 #visualizer {
-  flex-grow: 1;
   display: flex;
   align-items: flex-end;
+  flex-grow: 1;
 }
 
 .bar {
   background-color: turquoise;
   margin: 1px;
-  flex: 1;
+  flex-grow: 1;
 }
