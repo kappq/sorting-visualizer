@@ -24,7 +24,7 @@ jobs:
     - name: Build
       run: ./trunk build --release
     - name: Upload artifacts
-      uses: actions/upload-pages-artifcat@v1
+      uses: actions/upload-pages-artifact@v1
       with:
         path: dist
     - name: Deploy
