@@ -23,7 +23,9 @@ jobs:
     - run: wget -qO- https://github.com/thedodd/trunk/releases/download/v0.16.0/trunk-x86_64-unknown-linux-gnu.tar.gz | tar -xzf-
     - name: Build
       run: ./trunk build --release
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4
+    - name: Upload artifacts
+      uses: actions/upload-pages-artifcat@v1
       with:
-        folder: dist
+        path: dist
+    - name: Deploy
+      uses: actions/deploy-pages@v1
