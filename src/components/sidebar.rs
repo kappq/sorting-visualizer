@@ -6,30 +6,33 @@ use crate::helpers::generate_random_array;
 use crate::{Algorithm, State};
 
 #[component]
-pub fn Sidebar(cx: Scope, state: RwSignal<State>, array: RwSignal<Vec<usize>>) -> impl IntoView {
+pub fn Sidebar(cx: Scope, state: RwSignal<State>) -> impl IntoView {
     let set_algorithm = move |algorithm| state.update(|state| state.algorithm = algorithm);
 
     let on_array_size_change = move |ev: Event| {
-        let new_size = event_target_value(&ev).parse().unwrap();
-        state.update(|state| state.array_size = new_size);
-        array.set(generate_random_array(new_size));
+        let size = event_target_value(&ev).parse().unwrap();
+        state.update(|state| state.array.set(generate_random_array(size)));
     };
 
     let on_delay_change = move |ev: Event| {
-        let new_delay = event_target_value(&ev).parse().unwrap();
-        state.update(|state| state.delay = new_delay);
+        let delay = event_target_value(&ev).parse().unwrap();
+        state.update(|state| state.delay = delay);
     };
 
     let randomize_array = move |_| {
-        let array_size = state.with(|state| state.array_size);
-        array.set(generate_random_array(array_size));
+        state.update(|state| {
+            state
+                .array
+                .set(generate_random_array(state.array.with(|array| array.len())))
+        });
     };
 
     let visualize = move |_| {
-        let array_size = state.with(|state| state.array_size);
+        let array = state.with(|state| state.array);
         let delay = state.with(|state| state.delay);
+        let length = array.with(|array| array.len());
         match state.with(|state| state.algorithm) {
-            Algorithm::Quicksort => spawn_local(quicksort(array, delay, 0, array_size - 1)),
+            Algorithm::Quicksort => spawn_local(quicksort(array, delay, 0, length - 1)),
             Algorithm::Bubblesort => spawn_local(bubblesort(array, delay)),
         };
     };
